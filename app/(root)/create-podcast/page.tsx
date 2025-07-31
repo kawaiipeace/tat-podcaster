@@ -29,8 +29,9 @@ import { use, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import GeneratePodcast from "@/components/GeneratePodcast"
 import UploadPodcast from "@/components/UploadPodcast"
+import UploadThingAudio from "@/components/UploadThingAudio"
 import GenerateThumbnail from "@/components/GenerateThumbnail"
-import { Loader, Lock, LockKeyhole, Wand2, Upload } from "lucide-react"
+import { Loader, Lock, LockKeyhole, Wand2, Upload, Cloud } from "lucide-react"
 import { Id } from "@/convex/_generated/dataModel"
 import { useToast } from "@/components/ui/use-toast"
 import { useMutation } from "convex/react"
@@ -58,7 +59,7 @@ const CreatePodcast = () => {
 
   const [voiceType, setVoiceType] = useState<string | null>(null);
   const [voicePrompt, setVoicePrompt] = useState('');
-  const [audioCreationMethod, setAudioCreationMethod] = useState<'ai' | 'upload'>('ai');
+  const [audioCreationMethod, setAudioCreationMethod] = useState<'ai' | 'upload' | 'uploadthing'>('ai');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -166,16 +167,20 @@ const CreatePodcast = () => {
 
               <Select 
                 onValueChange={(value) => setVoiceType(value)}
-                disabled={audioCreationMethod === 'upload'}
+                disabled={audioCreationMethod === 'upload' || audioCreationMethod === 'uploadthing'}
               >
                 <SelectTrigger
                   className={cn(
                     "text-16 w-full border-none bg-black-1 text-gray-1 focus-visible:ring-offset-[--accent-color]",
-                    audioCreationMethod === 'upload' && "opacity-50 cursor-not-allowed"
+                    (audioCreationMethod === 'upload' || audioCreationMethod === 'uploadthing') && "opacity-50 cursor-not-allowed"
                   )}
                 >
                   <SelectValue
-                    placeholder={audioCreationMethod === 'upload' ? "Not needed for uploaded audio" : "Select AI Voice"}
+                    placeholder={
+                      (audioCreationMethod === 'upload' || audioCreationMethod === 'uploadthing') 
+                        ? "Not needed for uploaded audio" 
+                        : "Select AI Voice"
+                    }
                     className="placeholder:text-gray-1 "
                   />
                 </SelectTrigger>
@@ -232,26 +237,30 @@ const CreatePodcast = () => {
               <Tabs 
                 value={audioCreationMethod} 
                 onValueChange={(value) => {
-                  setAudioCreationMethod(value as 'ai' | 'upload');
+                  setAudioCreationMethod(value as 'ai' | 'upload' | 'uploadthing');
                   // Reset audio data when switching methods
                   setAudioUrl('');
                   setAudioStorageId(null);
                   setAudioDuration(0);
-                  if (value === 'upload') {
+                  if (value === 'upload' || value === 'uploadthing') {
                     setVoiceType(null);
                     setVoicePrompt('');
                   }
                 }}
                 className="w-full"
               >
-                <TabsList className="w-full">
-                  <TabsTrigger value="ai" className="flex-1 flex items-center gap-2">
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="ai" className="flex items-center gap-2">
                     <Wand2 size={16} />
                     AI Generate
                   </TabsTrigger>
-                  <TabsTrigger value="upload" className="flex-1 flex items-center gap-2">
+                  <TabsTrigger value="upload" className="flex items-center gap-2">
                     <Upload size={16} />
-                    Upload Audio
+                    Upload (Convex)
+                  </TabsTrigger>
+                  <TabsTrigger value="uploadthing" className="flex items-center gap-2">
+                    <Cloud size={16} />
+                    Upload (CDN)
                   </TabsTrigger>
                 </TabsList>
                 
@@ -269,6 +278,15 @@ const CreatePodcast = () => {
                 
                 <TabsContent value="upload" className="mt-6">
                   <UploadPodcast
+                    setAudio={setAudioUrl}
+                    setAudioStorageId={setAudioStorageId}
+                    audio={audioUrl}
+                    setAudioDuration={setAudioDuration}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="uploadthing" className="mt-6">
+                  <UploadThingAudio
                     setAudio={setAudioUrl}
                     setAudioStorageId={setAudioStorageId}
                     audio={audioUrl}
