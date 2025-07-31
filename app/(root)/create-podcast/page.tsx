@@ -23,12 +23,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import { use, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import GeneratePodcast from "@/components/GeneratePodcast"
+import UploadPodcast from "@/components/UploadPodcast"
 import GenerateThumbnail from "@/components/GenerateThumbnail"
-import { Loader, Lock, LockKeyhole } from "lucide-react"
+import { Loader, Lock, LockKeyhole, Wand2, Upload } from "lucide-react"
 import { Id } from "@/convex/_generated/dataModel"
 import { useToast } from "@/components/ui/use-toast"
 import { useMutation } from "convex/react"
@@ -56,6 +58,7 @@ const CreatePodcast = () => {
 
   const [voiceType, setVoiceType] = useState<string | null>(null);
   const [voicePrompt, setVoicePrompt] = useState('');
+  const [audioCreationMethod, setAudioCreationMethod] = useState<'ai' | 'upload'>('ai');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -80,12 +83,23 @@ const CreatePodcast = () => {
     try {
       setIsSubmitting(true);
 
-      if(!audioUrl || !imageUrl || !voiceType) {
+      if(!audioUrl || !imageUrl) {
         toast({
-          title: 'Please generate audio and image',
+          title: audioCreationMethod === 'ai' 
+            ? 'Please generate audio and image' 
+            : 'Please upload audio and generate image',
         })
         setIsSubmitting(false);
-        throw new Error('Please generate audio and image')
+        throw new Error('Please provide audio and image')
+      }
+
+      // สำหรับ AI generation ต้องมี voiceType
+      if(audioCreationMethod === 'ai' && !voiceType) {
+        toast({
+          title: 'Please select AI voice type',
+        })
+        setIsSubmitting(false);
+        throw new Error('Please select AI voice type')
       }
 
       const podcast = await createPodcast({
@@ -93,9 +107,9 @@ const CreatePodcast = () => {
         podcastDescription: data.podcastDescription,
         audioUrl,
         imageUrl,
-        voiceType,
+        voiceType: voiceType || 'uploaded', // ใช้ 'uploaded' สำหรับไฟล์ที่อัปโหลด
         imagePrompt,
-        voicePrompt,
+        voicePrompt: audioCreationMethod === 'ai' ? voicePrompt : 'Uploaded audio file',
         views: 0,
         audioDuration,
         audioStorageId: audioStorageId!,
@@ -150,36 +164,36 @@ const CreatePodcast = () => {
                 Select AI Voice
               </Label>
 
-              <Select onValueChange={(value) => setVoiceType(value)}>
+              <Select 
+                onValueChange={(value) => setVoiceType(value)}
+                disabled={audioCreationMethod === 'upload'}
+              >
                 <SelectTrigger
                   className={cn(
-                    "text-16 w-full border-none bg-black-1 text-gray-1 focus-visible:ring-offset-[--accent-color]"
+                    "text-16 w-full border-none bg-black-1 text-gray-1 focus-visible:ring-offset-[--accent-color]",
+                    audioCreationMethod === 'upload' && "opacity-50 cursor-not-allowed"
                   )}
                 >
                   <SelectValue
-                    placeholder="Select AI Voice"
+                    placeholder={audioCreationMethod === 'upload' ? "Not needed for uploaded audio" : "Select AI Voice"}
                     className="placeholder:text-gray-1 "
                   />
                 </SelectTrigger>
                 <SelectContent className="text-16 flex border-none bg-black-1 font-bold text-white-1 focus:ring-[--accent-color]">
                   {voiceCategories.map((category) => (
                     <SelectItem
-                      // disable all voices except alloy for non-subscribed users
-                      disabled={ false}
                       key={category}
                       value={category}
                       className="capitalize relative  flex items-center focus:bg-[--accent-color]"
                     >
-                     
-                        <span className="absolute left-0 top-0 bottom-0 inline-flex items-center justify-center">
-                          
-                        </span>
-                      
+                      <span className="absolute left-0 top-0 bottom-0 inline-flex items-center justify-center">
+                        
+                      </span>
                       {category}
                     </SelectItem>
                   ))}
                 </SelectContent>
-                {voiceType && (
+                {voiceType && audioCreationMethod === 'ai' && (
                   <audio
                     src={`/${voiceType}.mp3`}
                     autoPlay
@@ -210,15 +224,59 @@ const CreatePodcast = () => {
             />
           </div>
           <div className="flex flex-col pt-10">
-            <GeneratePodcast
-              setAudioStorageId={setAudioStorageId}
-              setAudio={setAudioUrl}
-              voiceType={voiceType!}
-              audio={audioUrl}
-              voicePrompt={voicePrompt}
-              setVoicePrompt={setVoicePrompt}
-              setAudioDuration={setAudioDuration}
-            />
+            <div className="flex flex-col gap-2.5 mb-8">
+              <Label className="text-16 font-bold text-white-1">
+                Audio Creation Method
+              </Label>
+              
+              <Tabs 
+                value={audioCreationMethod} 
+                onValueChange={(value) => {
+                  setAudioCreationMethod(value as 'ai' | 'upload');
+                  // Reset audio data when switching methods
+                  setAudioUrl('');
+                  setAudioStorageId(null);
+                  setAudioDuration(0);
+                  if (value === 'upload') {
+                    setVoiceType(null);
+                    setVoicePrompt('');
+                  }
+                }}
+                className="w-full"
+              >
+                <TabsList className="w-full">
+                  <TabsTrigger value="ai" className="flex-1 flex items-center gap-2">
+                    <Wand2 size={16} />
+                    AI Generate
+                  </TabsTrigger>
+                  <TabsTrigger value="upload" className="flex-1 flex items-center gap-2">
+                    <Upload size={16} />
+                    Upload Audio
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="ai" className="mt-6">
+                  <GeneratePodcast
+                    setAudioStorageId={setAudioStorageId}
+                    setAudio={setAudioUrl}
+                    voiceType={voiceType!}
+                    audio={audioUrl}
+                    voicePrompt={voicePrompt}
+                    setVoicePrompt={setVoicePrompt}
+                    setAudioDuration={setAudioDuration}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="upload" className="mt-6">
+                  <UploadPodcast
+                    setAudio={setAudioUrl}
+                    setAudioStorageId={setAudioStorageId}
+                    audio={audioUrl}
+                    setAudioDuration={setAudioDuration}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
 
             <GenerateThumbnail
               setImage={setImageUrl}
@@ -233,14 +291,14 @@ const CreatePodcast = () => {
                 type="submit"
                 className="text-16 w-full bg-[--accent-color] py-4 font-extrabold text-white-1 transition-all duration-500 hover:bg-black-1"
               >
-                {isSubmitting ? (
-                  <>
-                    Submitting
-                    <Loader size={20} className="animate-spin ml-2" />
-                  </>
-                ) : (
-                  "Submit & Publish Podcast"
-                )}
+                  {isSubmitting ? (
+                    <>
+                      Submitting
+                      <Loader size={20} className="animate-spin ml-2" />
+                    </>
+                  ) : (
+                    `Submit & Publish Podcast`
+                  )}
               </Button>
             </div>
           </div>
