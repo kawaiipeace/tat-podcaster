@@ -219,7 +219,7 @@ export default function Payments() {
             <div className="flex flex-col flex-1 bg-[--primary-color] rounded-lg p-[24px] w-full">
               <div className="flex h-16 items-center justify-between md:hidden">
                 <Image
-                  src="/icons/miclogo.svg"
+                  src="/icons/logo.png"
                   width={30}
                   height={30}
                   alt="menu icon"

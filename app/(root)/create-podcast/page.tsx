@@ -79,14 +79,14 @@ const CreatePodcast = () => {
 
       if(!audioUrl) {
         toast({
-          title: 'Please upload audio file',
+          title: 'กรุณาอัปโหลดไฟล์เสียง',
         })
         setIsSubmitting(false);
         throw new Error('Please provide audio file')
       }
 
       // Use default image if no image is uploaded
-      const finalImageUrl = imageUrl || '/images/player1.png';
+      const finalImageUrl = imageUrl || '/icons/logo.png';
       const finalImageStorageId = imageStorageId || undefined;
       
       // For UploadThing audio, we don't have storageId, only URL
@@ -105,14 +105,14 @@ const CreatePodcast = () => {
         audioStorageId: finalAudioStorageId,
         imageStorageId: finalImageStorageId,
       })
-      toast({ title: 'Podcast created' })
+      toast({ title: 'สร้างพอดแคสต์แล้ว' })
       setIsSubmitting(false);
       router.push('/')
     } catch (error : any) {
       console.error(error.message);
       toast({
-        title: 'Error',
-        description: error.message? error.message : "Unknown error",
+        title: 'เกิดข้อผิดพลาด',
+        description: error.message? error.message : "ข้อผิดพลาดที่ไม่ทราบสาเหตุ",
         variant: 'destructive',
       })
       setIsSubmitting(false);
@@ -121,7 +121,7 @@ const CreatePodcast = () => {
 
   return (
     <section className="mt-10 flex flex-col">
-      <h1 className="text-20 font-bold text-white-1">Create Podcast</h1>
+      <h1 className="text-20 font-bold text-white-1">สร้างพอดแคสต์</h1>
 
       <Form {...form}>
         <form
@@ -135,12 +135,12 @@ const CreatePodcast = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2.5">
                   <FormLabel className="text-16 font-bold text-white-1">
-                    Title
+                    ชื่อพอดแคสต์
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="input-class focus-visible:ring-offset-[--accent-color]"
-                      placeholder="The Joe Rogan Podcast"
+                      placeholder="ป้อนชื่อพอดแคสต์ของคุณ"
                       {...field}
                     />
                   </FormControl>
@@ -155,12 +155,12 @@ const CreatePodcast = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2.5">
                   <FormLabel className="text-16 font-bold text-white-1">
-                    Description
+                    คำอธิบาย
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       className="input-class focus-visible:ring-offset-[--accent-color]"
-                      placeholder="Write a short podcast description"
+                      placeholder="เขียนคำอธิบายสั้นๆ เกี่ยวกับพอดแคสต์ของคุณ"
                       {...field}
                     />
                   </FormControl>
@@ -172,7 +172,7 @@ const CreatePodcast = () => {
           <div className="flex flex-col pt-10">
             <div className="flex flex-col gap-2.5 mb-8">
               <Label className="text-16 font-bold text-white-1">
-                Audio Upload
+                อัปโหลดไฟล์เสียง
               </Label>
               
               <UploadThingAudio
@@ -198,11 +198,11 @@ const CreatePodcast = () => {
               >
                   {isSubmitting ? (
                     <>
-                      Submitting
+                      กำลังสร้าง...
                       <Loader size={20} className="animate-spin ml-2" />
                     </>
                   ) : (
-                    `Submit & Publish Podcast`
+                    `สร้างและเผยแพร่พอดแคสต์`
                   )}
               </Button>
             </div>

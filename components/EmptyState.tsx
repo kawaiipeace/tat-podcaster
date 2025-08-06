@@ -20,7 +20,7 @@ const EmptyState = ({ title, search, buttonLink, buttonText }: EmptyStateProps) 
         <h1 className="text-18 text-center font-semibold text-white-1">{title}</h1>
         {search && (
           <p className="text-14 text-center font-normal text-gray-1 leading-relaxed">
-            Try adjusting your search terms or check your spelling. You can also browse all available content.
+            ลองปรับเปลี่ยนคำค้นหาหรือตรวจสอบการสะกด นอกจากนี้คุณยังสามารถเรียกดูเนื้อหาทั้งหมดที่มี
           </p>
         )}
         {buttonLink && buttonText && (

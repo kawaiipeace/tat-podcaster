@@ -13,10 +13,10 @@ const Home = () => {
   return (
     <div className="mt-9 flex flex-col gap-9 md:overflow-hidden">
       <section className='flex flex-col gap-5'>
-        <h1 className="text-20 font-bold text-white-1">Trending Podcasts</h1>
+        <h1 className="text-20 font-bold text-white-1">พอดแคสต์ยอดนิยม</h1>
 
         {trendingPodcasts && trendingPodcasts.length > 0 ? (
-          <div className="podcast_grid">
+          <div className="podcast_stack">
             {trendingPodcasts?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
               <PodcastCard
                 key={_id} 
@@ -30,12 +30,12 @@ const Home = () => {
         ) : (
           <div className="flex flex-col items-center justify-center min-h-[400px]">
             <EmptyState
-              title="No trending podcasts available"
-              buttonText="Create First Podcast"
+              title="ไม่มีพอดแคสต์ยอดนิยม"
+              buttonText="สร้างพอดแคสต์แรก"
               buttonLink="/create-podcast"
             />
             <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
-              Be the first to share your voice! Create a podcast and start the trending conversation.
+              มาเป็นคนแรกที่แบ่งปันเสียงของคุณ! สร้างพอดแคสต์และเริ่มการสนทนาที่น่าสนใจ
             </p>
           </div>
         )}

@@ -16,13 +16,13 @@ const Discover = ({ searchParams: { search} }: { searchParams : { search: string
       <Searchbar />
       <div className="flex flex-col gap-9">
         <h1 className="text-20 font-bold text-white-1">
-          {!search ? 'Discover Trending Podcasts' : 'Search results for '}
+          {!search ? 'ค้นหาพอดแคสต์ยอดนิยม' : 'ผลการค้นหาสำหรับ '}
           {search && <span className="text-white-2">{search}</span>}
         </h1>
         {podcastsData ? (
           <>
             {podcastsData.length > 0 ? (
-              <div className="podcast_grid">
+              <div className="podcast_stack">
               {podcastsData?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
                 <PodcastCard 
                   key={_id}
@@ -36,11 +36,11 @@ const Discover = ({ searchParams: { search} }: { searchParams : { search: string
             ) : (
               <div className="flex flex-col items-center justify-center min-h-[400px]">
                 <EmptyState 
-                  title="No podcasts found" 
+                  title="ไม่พบพอดแคสต์" 
                   search={true}
                 />
                 <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
-                  Try adjusting your search terms or browse all available podcasts.
+                  ลองปรับเปลี่ยนคำค้นหาหรือเรียกดูพอดแคสต์ทั้งหมดที่มี
                 </p>
               </div>
             )}

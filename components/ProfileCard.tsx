@@ -97,7 +97,7 @@ const ProfileCard = ({
           />
           <h2 className="text-16 font-semibold text-white-1">
             {podcastData?.listeners} &nbsp;
-            <span className="font-normal text-white-2">monthly listeners</span>
+            <span className="font-normal text-white-2">ผู้ฟังรายเดือน</span>
           </h2>
         </figure>
         {podcastData?.podcasts.length > 0 && (
@@ -111,7 +111,7 @@ const ProfileCard = ({
               height={20}
               alt="random play"
             />{" "}
-            &nbsp; Play a random podcast
+            &nbsp; เล่นพอดแคสต์แบบสุ่ม
           </Button>
         )}
       </div>

@@ -48,7 +48,7 @@ const ProfilePage = ({
   return (
     <section className="mt-9 flex flex-col">
       <h1 className="text-20 font-bold text-white-1 max-md:text-center">
-        Podcaster Profile
+        โปรไฟล์ผู้สร้างพอดแคสต์
       </h1>
       <div className="mt-6 flex flex-col gap-6 max-md:items-center md:flex-row">
         <ProfileCard
@@ -59,9 +59,9 @@ const ProfilePage = ({
         />
       </div>
       <section className="mt-9 flex flex-col gap-5">
-        <h1 className="text-20 font-bold text-white-1">All Podcasts</h1>
+        <h1 className="text-20 font-bold text-white-1">พอดแคสต์ทั้งหมด</h1>
         {podcastsData && podcastsData.podcasts.length > 0 ? (
-          <div className="podcast_grid">
+          <div className="podcast_stack">
             {podcastsData?.podcasts
               ?.slice(0, 4)
               .map((podcast) => (
@@ -77,9 +77,9 @@ const ProfilePage = ({
         ) : (
           <div className="flex flex-col items-center justify-center min-h-[300px]">
             <EmptyState
-              title="No podcasts created yet"
+              title="ยังไม่ได้สร้างพอดแคสต์"
               search={false}
-              buttonText="Create Your First Podcast"
+              buttonText="สร้างพอดแคสต์แรกของคุณ"
               buttonLink="/create-podcast"
             />
             <p className="text-14 text-gray-1 mt-4 text-center max-w-md">

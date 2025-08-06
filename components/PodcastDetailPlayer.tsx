@@ -34,13 +34,13 @@ const PodcastDetailPlayer = ({
     try {
       await deletePodcast({ podcastId, imageStorageId, audioStorageId });
       toast({
-        title: "Podcast deleted",
+        title: "ลบพอดแคสต์แล้ว",
       });
       router.push("/");
     } catch (error) {
       console.error("Error deleting podcast", error);
       toast({
-        title: "Error deleting podcast",
+        title: "เกิดข้อผิดพลาดในการลบพอดแคสต์",
         variant: "destructive",
       });
     }
@@ -100,7 +100,7 @@ const PodcastDetailPlayer = ({
               height={20}
               alt="random play"
             />{" "}
-            &nbsp; Play podcast
+            &nbsp; เล่นพอดแคสต์
           </Button>
         </div>
       </div>
@@ -125,7 +125,7 @@ const PodcastDetailPlayer = ({
                 height={16}
                 alt="Delete icon"
               />
-              <h2 className="text-16 font-normal text-white-1">Delete</h2>
+              <h2 className="text-16 font-normal text-white-1">ลบ</h2>
             </div>
           )}
         </div>

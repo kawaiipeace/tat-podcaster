@@ -2,22 +2,22 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
-    label: "Home",
+    label: "หน้าแรก",
   },
   {
     imgURL: "/icons/discover.svg",
     route: "/discover",
-    label: "Discover",
+    label: "ค้นหา",
   },
   {
     imgURL: "/icons/microphone.svg",
     route: "/create-podcast",
-    label: "Create Podcast",
+    label: "สร้างพอดแคสต์",
   },
   {
     imgURL: "/icons/profile.svg",
     route: "/profile",
-    label: "Profile",
+    label: "โปรไฟล์",
   },
   // {
   //   imgURL: "/icons/chart.svg",

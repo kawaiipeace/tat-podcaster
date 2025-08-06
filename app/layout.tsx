@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Kanit } from "next/font/google";
 import "./globals.css";
 import ConvexClerkProvider from "../providers/ConvexClerkProvider";
 import AudioProvider from "@/providers/AudioProvider";
 import { Toaster } from "@/components/ui/toaster";
 import IsFetchingProvider  from "@/providers/IsFetchingProvider";
 
-const manrope = Manrope({ subsets: ["latin"] });
+const kanit = Kanit({ 
+  subsets: ["latin", "thai"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Tourism Brief Talk",
   description: "Tourism Brief Talk",
   icons: {
-    icon: '/icons/miclogo.svg'
+    icon: '/icons/logo.png'
   }
 };
 
@@ -26,7 +30,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <IsFetchingProvider>
         <AudioProvider>
-          <body className={`${manrope.className}`}>
+          <body className={`${kanit.className}`}>
               <Toaster />
             {children}
           </body>
