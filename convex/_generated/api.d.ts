@@ -16,7 +16,6 @@ import type {
 import type * as crons from "../crons.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
-import type * as openai from "../openai.js";
 import type * as payments from "../payments.js";
 import type * as podcasts from "../podcasts.js";
 import type * as stripe from "../stripe.js";
@@ -35,7 +34,6 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   files: typeof files;
   http: typeof http;
-  openai: typeof openai;
   payments: typeof payments;
   podcasts: typeof podcasts;
   stripe: typeof stripe;

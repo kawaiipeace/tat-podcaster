@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/-Typescript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="typescript" />
     <img src="https://img.shields.io/badge/-Next_._JS-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="nextdotjs" />
     <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="tailwindcss" />
-    <img src="https://img.shields.io/badge/-OpenAI-black?style=for-the-badge&logoColor=white&logo=openai&color=412991" alt="openai" />
     <img src="https://img.shields.io/badge/-Convex-black?style=for-the-badge&logoColor=white&logo=convex&color=FFD700" alt="convex" />
     <img src="https://img.shields.io/badge/-Clerk-black?style=for-the-badge&logoColor=white&logo=clerk&color=000000" alt="clerk" />
     <img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white" alt="shadcn" />
@@ -35,14 +34,13 @@
 
 ## <a name="introduction">🤖 Introduction</a>
 
-A cutting-edge AI SaaS platform that enables users to create, discover, and enjoy podcasts with advanced features like text-to-audio conversion with multi-voice AI, podcast thumbnail Image generation and seamless playback. The platform is built using Next.js, TypeScript, Convex, OpenAI, Clerk, ShadCN, and Tailwind CSS. It offers a modern home page, podcast discovery page, search functionality, podcast creation page, profile page, podcast details page, and a responsive design for a seamless user experience.
+A podcast platform that enables users to create, discover, and enjoy podcasts with upload-based content creation features. The platform is built using Next.js, TypeScript, Convex, Clerk, ShadCN, and Tailwind CSS. It offers a modern home page, podcast discovery page, search functionality, podcast creation page with file upload capabilities, profile page, podcast details page, and a responsive design for a seamless user experience.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
 - Next.js
 - TypeScript
 - Convex
-- OpenAI
 - Clerk
 - ShadCN
 - Tailwind CSS
@@ -58,9 +56,9 @@ A cutting-edge AI SaaS platform that enables users to create, discover, and enjo
 
 👉 **Comprehensive Search Functionality**: Empowers users to effortlessly find podcasts using various filters and criteria.
 
-👉 **Podcast Creation Page**: Facilitates podcast creation with text-to-speech conversion, AI-generated images, and preview options.
+👉 **Podcast Creation Page**: Facilitates podcast creation with audio upload and thumbnail upload capabilities.
 
-👉 **Multi-Voice AI Capability**: Provides multiple AI-generated voice options for creating dynamic and engaging podcasts.
+👉 **File Upload System**: Supports multiple upload methods including Convex storage and CDN upload via UploadThing.
 
 👉 **User Profile Page**: Allows users to view and manage their created podcasts, including options to delete them.
 

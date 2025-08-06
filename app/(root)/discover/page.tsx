@@ -33,7 +33,17 @@ const Discover = ({ searchParams: { search} }: { searchParams : { search: string
                 />
               ))}
             </div>
-            ) : <EmptyState title="No results found" />}
+            ) : (
+              <div className="flex flex-col items-center justify-center min-h-[400px]">
+                <EmptyState 
+                  title="No podcasts found" 
+                  search={true}
+                />
+                <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
+                  Try adjusting your search terms or browse all available podcasts.
+                </p>
+              </div>
+            )}
           </>
         ) : <LoaderSpinner />}
       </div>

@@ -76,13 +76,16 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
             ))}
           </div>
         ) : (
-          <>
+          <div className="flex flex-col items-center justify-center min-h-[300px]">
             <EmptyState
               title="No similar podcasts found"
               buttonLink="/discover"
-              buttonText="Discover more podcasts"
+              buttonText="Discover More Podcasts"
             />
-          </>
+            <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
+              Explore our discover page to find more interesting podcasts that might interest you.
+            </p>
+          </div>
         )}
       </section>
 

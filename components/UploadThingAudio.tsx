@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { UploadButton, UploadDropzone } from '@uploadthing/react'
+import { UploadButton } from '@uploadthing/react'
 import { Label } from './ui/label'
 import { useToast } from './ui/use-toast'
-import { Music, AlertCircle } from 'lucide-react'
+import { Music, Upload, Loader } from 'lucide-react'
 import { Id } from '@/convex/_generated/dataModel'
 import type { OurFileRouter } from '@/app/api/uploadthing/core'
 
@@ -61,25 +61,39 @@ const UploadThingAudio = ({
       </Label>
       
       {!audio ? (
-        <div className="border-2 border-dashed border-gray-600 rounded-lg p-6">
-          <UploadDropzone<OurFileRouter, "audioUploader">
-            endpoint="audioUploader"
-            onClientUploadComplete={handleUploadComplete}
-            onUploadError={handleUploadError}
-            onUploadBegin={() => setIsUploading(true)}
-            appearance={{
-              container: "border-none bg-transparent",
-              uploadIcon: "text-gray-400",
-              label: "text-white-2",
-              allowedContent: "text-gray-400 text-sm",
-              button: "bg-[--accent-color] hover:bg-[--accent-color]/80 text-white ut-ready:bg-[--accent-color] ut-uploading:cursor-not-allowed ut-uploading:bg-gray-600"
-            }}
-            content={{
-              label: "Drag & drop audio file here, or click to browse",
-              allowedContent: "Audio files up to 32MB (MP3, WAV, M4A, etc.)",
-              button: isUploading ? "Uploading..." : "Choose Audio File"
-            }}
-          />
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <Upload className="w-12 h-12 text-gray-400" />
+            <div>
+              <h3 className="text-white-2 font-medium mb-2">Upload Audio File</h3>
+              <p className="text-gray-400 text-sm mb-4">Click below to select and upload your audio file</p>
+            </div>
+            
+            <UploadButton<OurFileRouter, "audioUploader">
+              endpoint="audioUploader"
+              onClientUploadComplete={handleUploadComplete}
+              onUploadError={handleUploadError}
+              onUploadBegin={() => setIsUploading(true)}
+              appearance={{
+                button: "bg-[--accent-color] hover:bg-[--accent-color]/80 text-white px-6 py-3 ut-ready:bg-[--accent-color] ut-uploading:cursor-not-allowed ut-uploading:bg-gray-600 min-w-[200px]",
+                allowedContent: "text-gray-400 text-xs mt-2"
+              }}
+              content={{
+                button: isUploading ? (
+                  <div className="flex items-center gap-2">
+                    <Loader className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Upload className="w-4 h-4" />
+                    Choose Audio File
+                  </div>
+                ),
+                allowedContent: "Audio files up to 32MB (MP3, WAV, M4A, etc.)"
+              }}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -110,6 +124,7 @@ const UploadThingAudio = ({
             endpoint="audioUploader" 
             onClientUploadComplete={handleUploadComplete}
             onUploadError={handleUploadError}
+            onUploadBegin={() => setIsUploading(true)}
             appearance={{
               button: "bg-gray-600 hover:bg-gray-700 text-white text-sm px-4 py-2",
             }}

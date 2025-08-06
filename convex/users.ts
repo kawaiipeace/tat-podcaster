@@ -1,6 +1,6 @@
 import { ConvexError, v } from "convex/values";
 
-import { MutationCtx, QueryCtx, internalMutation, query } from "./_generated/server";
+import { MutationCtx, QueryCtx, internalMutation, mutation, query } from "./_generated/server";
 import { getUserId } from "./util";
 import { internal } from "./_generated/api";
 
@@ -41,7 +41,8 @@ export const getUserById = query({
       .unique();
 
     if (!user) {
-      throw new ConvexError("User not found");
+      // Return null instead of throwing error to prevent infinite loading
+      return null;
     }
 
     return user;
@@ -76,7 +77,8 @@ export const getSubscriptionByClerkId = query({
       .first();
 
     if (!user) {
-      throw new ConvexError("User not found");
+      // Return null instead of throwing error
+      return null;
     }
 
     return {
@@ -112,7 +114,8 @@ export const getTotalPodcastsOfUser = query({
       .unique();
 
     if (!user) {
-      throw new ConvexError("User not found");
+      // Return 0 instead of throwing error
+      return 0;
     }
 
     return user.totalPodcasts;
@@ -269,5 +272,37 @@ export const deleteUser = internalMutation({
     }
 
     await ctx.db.delete(user._id);
+  },
+});
+
+// Function to create user from Clerk authentication
+export const createUserFromClerk = mutation({
+  args: {
+    clerkId: v.string(),
+    email: v.string(),
+    imageUrl: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Check if user already exists
+    const existingUser = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
+      .unique();
+
+    if (existingUser) {
+      return existingUser;
+    }
+
+    // Create new user
+    const newUserId = await ctx.db.insert("users", {
+      clerkId: args.clerkId,
+      email: args.email,
+      imageUrl: args.imageUrl,
+      name: args.name,
+      totalPodcasts: 0,
+    });
+
+    return await ctx.db.get(newUserId);
   },
 });

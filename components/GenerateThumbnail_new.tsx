@@ -70,11 +70,8 @@ const GenerateThumbnail = ({ setImage, setImageStorageId, image }: GenerateThumb
           variant="plain"
           className="text-16 bg-black-6 font-bold text-white-1"
         >
-          Upload Thumbnail (Optional)
+          Upload Thumbnail Image
         </Button>
-        <p className="text-12 font-normal text-gray-1 mt-2">
-          Upload a custom thumbnail or we'll use a default image
-        </p>
       </div>
       
       <div className="image_div" onClick={() => imageRef?.current?.click()}>

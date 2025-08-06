@@ -1,6 +1,7 @@
 import LeftSidebar from "@/components/LeftSidebar";
 import MobileNav from "@/components/MobileNav";
 import RightSidebar from "@/components/RightSidebar";
+import UserInitializer from "@/components/UserInitializer";
 import Image from "next/image";
 import PodcastPlayer from "@/components/PodcastPlayer";
 
@@ -11,6 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="relative flex flex-col">
+      <UserInitializer />
       <main className="relative flex bg-[--primary-color]">
         <LeftSidebar />
 

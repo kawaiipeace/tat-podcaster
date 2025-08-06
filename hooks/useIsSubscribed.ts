@@ -10,9 +10,10 @@ export function useIsSubscribed(id: string) {
   const user = useQuery(api.users.getSubscriptionByClerkId, { clerkId: id });
 
   useEffect(() => {
-    if (!user) return;
-    setIsFetching(false);
-  }, [user]);
+    if (user !== undefined) {
+      setIsFetching(false);
+    }
+  }, [user, setIsFetching]);
 
   if (!user || !user.endsOn) return false;
 
@@ -26,9 +27,10 @@ export function useGetPlan(id: string) {
   const user = useQuery(api.users.getSubscriptionByClerkId, { clerkId: id });
 
   useEffect(() => {
-    if (!user) return;
-    setIsFetching(false);
-  }, [user]);
+    if (user !== undefined) {
+      setIsFetching(false);
+    }
+  }, [user, setIsFetching]);
 
   if (!user || !user.plan) return "free";
 

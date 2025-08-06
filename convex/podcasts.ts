@@ -17,12 +17,12 @@ type User = {
 // create podcast mutation
 export const createPodcast = mutation({
   args: {
-    audioStorageId: v.id("_storage"),
+    audioStorageId: v.optional(v.id("_storage")),
     podcastTitle: v.string(),
     podcastDescription: v.string(),
     audioUrl: v.string(),
     imageUrl: v.string(),
-    imageStorageId: v.id("_storage"),
+    imageStorageId: v.optional(v.id("_storage")),
     voicePrompt: v.string(),
     imagePrompt: v.string(),
     voiceType: v.string(),

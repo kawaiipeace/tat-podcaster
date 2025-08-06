@@ -64,8 +64,8 @@ export interface GenerateThumbnailProps {
   setImage: Dispatch<SetStateAction<string>>;
   setImageStorageId: Dispatch<SetStateAction<Id<"_storage"> | null>>;
   image: string;
-  imagePrompt: string;
-  setImagePrompt: Dispatch<SetStateAction<string>>;
+  imagePrompt?: string;
+  setImagePrompt?: Dispatch<SetStateAction<string>>;
 }
 
 export interface LatestPodcastCardProps {

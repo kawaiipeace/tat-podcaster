@@ -22,7 +22,28 @@ const ProfilePage = ({
     authorId: params.profileId,
   });
 
-  if (!user || !podcastsData) return <LoaderSpinner />;
+  if (!podcastsData) return <LoaderSpinner />;
+
+  // If user doesn't exist, show message to create account
+  if (user === null) {
+    return (
+      <section className="mt-9 flex flex-col">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <EmptyState
+            title="User not found"
+            search={false}
+            buttonText="Go to Home"
+            buttonLink="/"
+          />
+          <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
+            This user profile doesn't exist or the user hasn't created an account yet.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!user) return <LoaderSpinner />;
 
   return (
     <section className="mt-9 flex flex-col">
@@ -33,8 +54,8 @@ const ProfilePage = ({
         <ProfileCard
           profileId={params.profileId}
           podcastData={podcastsData!}
-          imageUrl={user?.imageUrl!}
-          userFirstName={user?.name!}
+          imageUrl={user?.imageUrl || ""}
+          userFirstName={user?.name || "User"}
         />
       </div>
       <section className="mt-9 flex flex-col gap-5">
@@ -54,11 +75,17 @@ const ProfilePage = ({
               ))}
           </div>
         ) : (
-          <EmptyState
-            title="You have not created any podcasts yet"
-            buttonLink="/create-podcast"
-            buttonText="Create Podcast"
-          />
+          <div className="flex flex-col items-center justify-center min-h-[300px]">
+            <EmptyState
+              title="No podcasts created yet"
+              search={false}
+              buttonText="Create Your First Podcast"
+              buttonLink="/create-podcast"
+            />
+            <p className="text-14 text-gray-1 mt-4 text-center max-w-md">
+              Start your podcasting journey by uploading your first audio content and sharing it with the world.
+            </p>
+          </div>
         )}
       </section>
     </section>

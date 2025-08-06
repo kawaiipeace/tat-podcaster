@@ -9,8 +9,8 @@ import IsFetchingProvider  from "@/providers/IsFetchingProvider";
 const manrope = Manrope({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TAT Podcaster",
-  description: "Generate podcasts in your language on the fly using AI",
+  title: "Tourism Brief Talk",
+  description: "Tourism Brief Talk",
   icons: {
     icon: '/icons/miclogo.svg'
   }
