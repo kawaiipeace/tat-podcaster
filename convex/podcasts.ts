@@ -36,43 +36,64 @@ export const createPodcast = mutation({
       throw new ConvexError("User not authenticated");
     }
 
-    const user = await ctx.db
+    // Try to find user by email first
+    let user = await ctx.db
       .query("users")
       .filter((q) => q.eq(q.field("email"), identity.email))
-      .collect();
+      .first();
 
-    if (user.length === 0) {
-      throw new ConvexError("User not found");
+    // If user not found, try to find by clerkId
+    if (!user) {
+      user = await ctx.db
+        .query("users")
+        .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+        .first();
+    }
+
+    // If still no user found, create one
+    if (!user) {
+      const newUserId = await ctx.db.insert("users", {
+        clerkId: identity.subject,
+        email: identity.email || "user@example.com",
+        imageUrl: identity.pictureUrl || "",
+        name: identity.name || identity.givenName || "User",
+        totalPodcasts: 0,
+      });
+      
+      user = await ctx.db.get(newUserId);
+      if (!user) {
+        throw new ConvexError("Failed to create user");
+      }
     }
 
     const isSubscribed =
-      user[0].subscriptionId && user[0].endsOn && user[0].endsOn > new Date().getTime();
+      user.subscriptionId && user.endsOn && user.endsOn > new Date().getTime();
 
     const voiceType = isSubscribed ? args.voiceType : "alloy";
 
-    await handlePodcastSubscription(ctx, user[0]);
+    await handlePodcastSubscription(ctx, user);
 
     const newPodcast = await ctx.db.insert("podcasts", {
       audioStorageId: args.audioStorageId,
-      user: user[0]._id,
+      user: user._id,
       podcastTitle: args.podcastTitle,
       podcastDescription: args.podcastDescription,
       audioUrl: args.audioUrl,
       imageUrl: args.imageUrl,
       imageStorageId: args.imageStorageId,
-      author: user[0].name,
-      authorId: user[0].clerkId,
+      author: user.name,
+      authorId: user.clerkId,
       voicePrompt: args.voicePrompt,
       imagePrompt: args.imagePrompt,
       voiceType: voiceType,
       views: args.views,
-      authorImageUrl: user[0].imageUrl,
+      authorImageUrl: user.imageUrl,
       audioDuration: args.audioDuration,
     });
 
     // update the totalPodcasts of the user
-    await ctx.db.patch(user[0]._id, {
-      totalPodcasts: user[0].totalPodcasts + 1,
+    await ctx.db.patch(user._id, {
+      totalPodcasts: user.totalPodcasts + 1,
     });
 
     return newPodcast;
