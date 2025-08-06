@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { UploadButton } from '@uploadthing/react'
 import { Label } from './ui/label'
 import { useToast } from './ui/use-toast'
@@ -20,7 +20,13 @@ const UploadThingAudio = ({
   setAudioDuration
 }: UploadThingAudioProps) => {
   const [isUploading, setIsUploading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const { toast } = useToast()
+
+  // Fix SSR/SSG hydration issues
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleUploadComplete = (res: any[]) => {
     if (res && res[0]) {
@@ -52,6 +58,27 @@ const UploadThingAudio = ({
       variant: 'destructive'
     })
     setIsUploading(false)
+  }
+
+  // Don't render UploadButton during SSR
+  if (!isMounted) {
+    return (
+      <div className="flex flex-col gap-4">
+        <Label className="text-16 font-bold text-white-1">
+          Upload Audio File (UploadThing)
+        </Label>
+        
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <Upload className="w-12 h-12 text-gray-400" />
+            <div>
+              <h3 className="text-white-2 font-medium mb-2">Loading upload component...</h3>
+              <p className="text-gray-400 text-sm mb-4">Please wait</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
